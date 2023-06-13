@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     List<ModelTodoActivity> modelTodoActivities = new ArrayList<>();
     String  url = "https://mgm.ub.ac.id/todo.php";
     private RecyclerView rvTodo;
-    private Context context;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,15 @@ public class MainActivity extends AppCompatActivity {
 
         rvTodo = (RecyclerView) findViewById(R.id.rvTodo);
         rvTodo.setLayoutManager(new LinearLayoutManager( this));
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         checkInternetConnection();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Call the method to refresh your data or perform any desired actions
+                refreshData();
+            }
+        });
     }
 
     /**
@@ -116,5 +126,17 @@ public class MainActivity extends AppCompatActivity {
             // No internet connection, handle accordingly
             showAlert(MainActivity.this, "Ooops !", "Tidak ada koneksi Internet");
         }
+    }
+
+    private void refreshData() {
+        // Perform actions to refresh your data
+        modelTodoActivities.clear();
+        checkInternetConnection();
+        // Call the method to stop the refresh animation when the refresh is complete
+        stopRefreshing();
+    }
+
+    private void stopRefreshing() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
