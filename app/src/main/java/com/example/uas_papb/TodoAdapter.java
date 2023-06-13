@@ -46,7 +46,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder> {
             super(itemView);
             timeTextView = (TextView) itemView.findViewById(R.id.time_text_view);
             todoTextView = (TextView) itemView.findViewById(R.id.todo_text_view);
-            timeTextView.setTextColor(Color.BLACK);
+//            timeTextView.setTextColor(Color.BLACK);
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.example.uas_papb;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -21,11 +24,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+
 public class MainActivity extends AppCompatActivity {
 
     List<ModelTodoActivity> modelTodoActivities = new ArrayList<>();
     String  url = "https://mgm.ub.ac.id/todo.php";
     private RecyclerView rvTodo;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         rvTodo = (RecyclerView) findViewById(R.id.rvTodo);
         rvTodo.setLayoutManager(new LinearLayoutManager( this));
-        getData();
+        checkInternetConnection();
     }
 
     /**
@@ -85,5 +91,30 @@ public class MainActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    public void showAlert(Context context, String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Kode yang akan dijalankan saat tombol OK ditekan
+                    }
+                })
+                .setCancelable(false)
+                .show();
+    }
+
+    private void checkInternetConnection() {
+        boolean isConnected = NetworkUtils.isInternetConnected(this);
+
+        if (isConnected) {
+            getData();
+        } else {
+            // No internet connection, handle accordingly
+            showAlert(MainActivity.this, "Ooops !", "Tidak ada koneksi Internet");
+        }
     }
 }
